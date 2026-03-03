@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Facturas</title>
+  <meta name="description" content="Herramienta privada de facturación para mayorista de pescado" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================== -->
+  <!-- ENCABEZADO PRINCIPAL            -->
+  <!-- ============================== -->
+  <header class="app-header">
+    <div class="header-content">
+      <h1>📄 Generador de Facturas</h1>
+      <p class="header-subtitle">Herramienta de facturación</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ============================== -->
+    <!-- SECCIÓN: CABECERA FACTURA      -->
+    <!-- ============================== -->
+    <section class="card" id="seccion-cabecera">
+      <div class="card-header">
+        <span class="card-icon">🧾</span>
+        <h2>Datos de la factura</h2>
+      </div>
+      <div class="card-body grid-2">
+        <div class="form-group">
+          <label for="numero-factura">Nº Factura</label>
+          <input type="text" id="numero-factura" placeholder="Ej: 2026-001" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="fecha-factura">Fecha</label>
+          <input type="date" id="fecha-factura" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- SECCIÓN: DATOS DEL CLIENTE     -->
+    <!-- ============================== -->
+    <section class="card" id="seccion-cliente">
+      <div class="card-header">
+        <span class="card-icon">👤</span>
+        <h2>Cliente</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- Selector de cliente existente -->
+        <div class="form-group">
+          <label for="selector-cliente">Seleccionar cliente</label>
+          <div class="select-wrapper">
+            <select id="selector-cliente">
+              <option value="">— Elige un cliente —</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Campos autocompletados del cliente -->
+        <div class="grid-2" id="campos-cliente">
+          <div class="form-group">
+            <label for="cliente-nombre">Nombre</label>
+            <input type="text" id="cliente-nombre" placeholder="Nombre completo" readonly />
+          </div>
+          <div class="form-group">
+            <label for="cliente-dni">DNI / CIF</label>
+            <input type="text" id="cliente-dni" placeholder="12345678A" readonly />
+          </div>
+          <div class="form-group full-width">
+            <label for="cliente-direccion">Dirección</label>
+            <input type="text" id="cliente-direccion" placeholder="Calle, número…" readonly />
+          </div>
+          <div class="form-group">
+            <label for="cliente-ciudad">Ciudad</label>
+            <input type="text" id="cliente-ciudad" placeholder="Ciudad" readonly />
+          </div>
+          <div class="form-group">
+            <label for="cliente-cp">Código Postal</label>
+            <input type="text" id="cliente-cp" placeholder="00000" readonly />
+          </div>
+        </div>
+
+        <!-- Botón para mostrar formulario de nuevo cliente -->
+        <button type="button" class="btn btn-secondary" id="btn-toggle-nuevo-cliente">
+          ＋ Nuevo cliente
+        </button>
+
+        <!-- Formulario de nuevo cliente (oculto por defecto) -->
+        <div class="nuevo-cliente-form" id="nuevo-cliente-form" hidden>
+          <h3>Añadir nuevo cliente</h3>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="nuevo-nombre">Nombre</label>
+              <input type="text" id="nuevo-nombre" placeholder="Nombre completo" />
+            </div>
+            <div class="form-group">
+              <label for="nuevo-dni">DNI / CIF</label>
+              <input type="text" id="nuevo-dni" placeholder="12345678A" />
+            </div>
+            <div class="form-group full-width">
+              <label for="nuevo-direccion">Dirección</label>
+              <input type="text" id="nuevo-direccion" placeholder="Calle, número…" />
+            </div>
+            <div class="form-group">
+              <label for="nuevo-ciudad">Ciudad</label>
+              <input type="text" id="nuevo-ciudad" placeholder="Ciudad" />
+            </div>
+            <div class="form-group">
+              <label for="nuevo-cp">Código Postal</label>
+              <input type="text" id="nuevo-cp" placeholder="00000" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-accent" id="btn-guardar-cliente">Guardar cliente</button>
+            <button type="button" class="btn btn-ghost" id="btn-cancelar-cliente">Cancelar</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- SECCIÓN: LÍNEAS DE PRODUCTO    -->
+    <!-- ============================== -->
+    <section class="card" id="seccion-productos">
+      <div class="card-header">
+        <span class="card-icon">🐟</span>
+        <h2>Productos</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- Contenedor de las líneas de producto -->
+        <div id="lineas-producto">
+          <!-- Las líneas se añaden dinámicamente desde JS -->
+        </div>
+
+        <button type="button" class="btn btn-secondary" id="btn-añadir-producto">
+          ＋ Añadir producto
+        </button>
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- SECCIÓN: RESUMEN Y TOTALES     -->
+    <!-- ============================== -->
+    <section class="card" id="seccion-resumen">
+      <div class="card-header">
+        <span class="card-icon">💰</span>
+        <h2>Resumen</h2>
+      </div>
+      <div class="card-body">
+
+        <div class="resumen-linea">
+          <span>Subtotal</span>
+          <span class="resumen-valor" id="resumen-subtotal">0,00 €</span>
+        </div>
+        <div class="resumen-linea">
+          <span>IVA productos (10%)</span>
+          <span class="resumen-valor" id="resumen-iva-productos">0,00 €</span>
+        </div>
+
+        <div class="resumen-linea resumen-porte">
+          <div class="form-group form-group-inline">
+            <label for="porte-valor">Porte</label>
+            <input type="number" id="porte-valor" placeholder="0,00" step="0.01" min="0" value="0" />
+          </div>
+          <span class="resumen-valor" id="resumen-porte">0,00 €</span>
+        </div>
+        <div class="resumen-linea">
+          <span>IVA porte (21%)</span>
+          <span class="resumen-valor" id="resumen-iva-porte">0,00 €</span>
+        </div>
+
+        <div class="resumen-linea resumen-total">
+          <span>Total factura</span>
+          <span class="resumen-valor" id="resumen-total">0,00 €</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- BOTÓN DE ENVÍO                 -->
+    <!-- ============================== -->
+    <section class="acciones-envio">
+      <button type="button" class="btn btn-primary btn-grande" id="btn-generar-factura">
+        🚀 Generar factura
+      </button>
+      <p class="estado-envio" id="estado-envio"></p>
+    </section>
+
+  </main>
+
+  <!-- ============================== -->
+  <!-- PIE DE PÁGINA                   -->
+  <!-- ============================== -->
+  <footer class="app-footer">
+    <p>Herramienta privada de facturación · 2026</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
