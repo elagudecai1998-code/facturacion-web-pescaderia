@@ -7,7 +7,7 @@
 // URL del webhook donde se enviarán los datos.
 // Cambia esta URL por la de tu webhook real.
 // ──────────────────────────────────────────────
-const WEBHOOK_URL = 'https://TU-WEBHOOK-AQUI.ejemplo.com/factura';
+const WEBHOOK_URL = 'https://n8n-production-0b2e.up.railway.app/webhook/factura';
 
 // ──────────────────────────────────────────────
 // REFERENCIAS AL DOM
